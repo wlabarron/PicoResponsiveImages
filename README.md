@@ -1,4 +1,4 @@
-# PicoResponsiveImages
+# Pico Responsive Images
 This is a plugin for [Pico CMS](http://picocms.org) which provides a Markdown-like syntax to include lazy loaded images 
 in your pages, powered by [aFarkas/lazysizes](https://github.com/aFarkas/lazysizes). You can also include multiple 
 sizes of source image per image element -- the user's browser then chooses the best one to download and display based 

@@ -3,7 +3,7 @@
 use Symfony\Component\Yaml\Parser;
 
 /**
- * PicoResponsiveImages - add a shorthand to your Markdown files for responsive and lazy loading images.
+ * Pico Responsive Images - add a shorthand to your Markdown files for responsive and lazy loading images.
  * Make sure to include https://github.com/aFarkas/lazysizes in your theme.
  * @author  Andrew Barron
  * @link    https://github.com/wlabarron/PicoResponsiveImages
