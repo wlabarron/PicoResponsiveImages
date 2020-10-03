@@ -3,10 +3,10 @@
 use Symfony\Component\Yaml\Parser;
 
 /**
- * ResponsiveImages - add a shorthand to your Markdown files for responsive and lazyloading images.
+ * PicoResponsiveImages - add a shorthand to your Markdown files for responsive and lazy loading images.
  * Make sure to include https://github.com/aFarkas/lazysizes in your theme.
  * @author  Andrew Barron
- * @link    https://awmb.uk
+ * @link    https://github.com/wlabarron/PicoResponsiveImages
  * @see <a href="https://github.com/aFarkas/lazysizes">LazySizes</a>
  * @see <a href="https://cdnjs.com/libraries/lazysizes">LazySizes on cdnjs</a>
  * @license http://opensource.org/licenses/MIT The MIT License
@@ -23,18 +23,18 @@ class ResponsiveImages extends AbstractPicoPlugin
 
     /**
      * Triggered after Pico has prepared the raw file contents for parsing. Replaces custom Markdown-like syntax
-     * with the HTML for a lazyloaded and/or responsive image.
+     * with the HTML for a lazy loaded and/or responsive image.
      *
-     * @see DummyPlugin::onContentParsing()
+     * @param string &$markdown Markdown contents of the requested page
      * @see Pico::parseFileContent()
      * @see DummyPlugin::onContentParsed()
      *
-     * @param string &$markdown Markdown contents of the requested page
+     * @see DummyPlugin::onContentParsing()
      */
     public function onContentPrepared(&$markdown)
     {
         do {
-            // if the passed page contains a request for lazyloaded image
+            // if the passed page contains a request for lazy loaded image
             if (strpos($markdown, '?[') !== false) {
                 // mark we've found an image
                 $imageFound = true;
