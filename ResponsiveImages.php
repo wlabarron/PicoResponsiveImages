@@ -1,4 +1,5 @@
 <?php
+
 use Symfony\Component\Yaml\Parser;
 
 /**
@@ -34,62 +35,60 @@ class ResponsiveImages extends AbstractPicoPlugin
     {
         $imageFound = false;
         do {
-            // if the passed page contains a request for image
-            if (strpos($markdown, '[img|') !== false) {
+            // if the passed page contains a request for lazyloaded image
+            if (strpos($markdown, '?[') !== false) {
                 // mark we've found an image
                 $imageFound = true;
 
-                // find the start and end of the responsive image request
-                $start = strpos($markdown, '[img|');
-                $end = strpos($markdown, ']', $start + 1);
+                // find the start and end of the alt text
+                $altStart = strpos($markdown, '?[') + 2;
+                $altEnd = strpos($markdown, ']', $altStart + 1);
+                // get the alt text
+                $alt = substr($markdown, $altStart, $altEnd - $altStart);
 
-                // get the image request and split it by |
-                $request = substr($markdown, $start, $end - $start);
-                $requestSplit = explode("|", $request);
+                // check if there is an opening bracket for the path after the alt text
+                if ($markdown[$altEnd + 1] === "(") {
+                    // note the start of the path
+                    $pathStart = $altEnd + 2;
 
-                // if there are 4 parameters to the request
-                if (sizeof($requestSplit) == 4) {
-                    // Create the code for the image
-                    $responsiveLazyloadingImageTags = <<<EOT
+                    // find the end of the paths list
+                    $pathEnd = strpos($markdown, ')', $pathStart);
+
+                    // get the path string, remove spaces, and split by comma
+                    $path = substr($markdown, $pathStart, $pathEnd - $pathStart);
+                    $path = preg_replace("(/,\s*/)", "", $path);
+                    $pathExploded = explode(",", $path);
+
+                    // Default image source is the first item in the path list
+                    $srcFull = $pathExploded[0]; // default image source with size details
+                    $src = explode(" ", $pathExploded[0])[0]; // default image source path only
+
+                    $srcset = "";
+                    // If there is more than one item in the exploded path string, set up srcset
+                    if (sizeof($pathExploded) > 1) {
+                        // Remove the first path from the start of the string of paths, then set the remaining paths as
+                        // the srcset value
+                        $srcset = "data-srcset='" . preg_replace("(/^$srcFull,/)", "", $path) . "'";
+                    }
+
+                    // Generate the image tag
+                    $imageTag = <<<EOT
 <noscript>
- <img src='$requestSplit[1]' alt='$requestSplit[3]' width='100%' />
+ <img src='$src' alt='$alt' width='100%' />
 </noscript>
 <img src='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
  data-sizes='auto'
- data-src='$requestSplit[1]'
- data-srcset='$requestSplit[2]'
-  alt='$requestSplit[3]'
+ data-src='$src'
+ $srcset
+  alt='$alt'
   width='100%' class='lazyload' />
 EOT;
 
-                    // replace the request with a responsive, lazyloading image with multiple sizes
-                    $markdown = substr_replace($markdown, $responsiveLazyloadingImageTags, $start, $end - $start + 1);
-                } else if (sizeof($requestSplit) == 3) {
-                    // Create the code for the image
-                    $lazyloadingImageTags = <<< EOT
-<noscript>
- <img src='$requestSplit[1]' alt='$requestSplit[2]' width='100%' />
-</noscript>
-<img src='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
- data-src='$requestSplit[1]'
- alt='$requestSplit[2]'
- width='100%' class='lazyload' />
-EOT;
+                    // replace the request with the image HTML
+                    $markdown = substr_replace($markdown, $imageTag, $altStart - 2, $pathEnd - $altStart + 3);
 
-                    // replace the request with a lazyloading image image
-                    $markdown = substr_replace($markdown, $lazyloadingImageTags, $start, $end - $start + 1);
-                } else { // malformed request
-                    // mark we've found an image
-                    $imageFound = true;
-
-                    // find the start and end of the responsive image request
-                    $start = strpos($markdown, '[img|');
-                    $end = strpos($markdown, ']', $start + 1);
-
-                    // replace the bad request with a nothing - stops us trying to change it again
-                    $markdown = substr_replace($markdown, '', $start, $end - $start + 1);
-
-                    error_log("Malformed request for responsive image.");
+                } else {
+                    error_log("No paths found after alt text");
                 }
             } else { // if no request is found
                 $imageFound = false;
