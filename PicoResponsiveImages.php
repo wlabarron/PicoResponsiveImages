@@ -12,7 +12,7 @@ use Symfony\Component\Yaml\Parser;
  * @license http://opensource.org/licenses/MIT The MIT License
  * @version 0.1
  */
-class ResponsiveImages extends AbstractPicoPlugin
+class PicoResponsiveImages extends AbstractPicoPlugin
 {
     /**
      * API version used by this plugin
