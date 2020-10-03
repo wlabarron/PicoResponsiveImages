@@ -33,7 +33,6 @@ class ResponsiveImages extends AbstractPicoPlugin
      */
     public function onContentPrepared(&$markdown)
     {
-        $imageFound = false;
         do {
             // if the passed page contains a request for lazyloaded image
             if (strpos($markdown, '?[') !== false) {
