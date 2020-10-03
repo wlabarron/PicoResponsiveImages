@@ -25,7 +25,7 @@ JavaScript disabled.
 ### Lazy loading images
 Include an image using the standard Markdown syntax, but swap `!` for `?`.
 
-`![A cat on a mat](/assets/cat.png)` becomes `?[A cat on a mat](/assets/cat.png)`. Done! 
+* `?[A cat on a mat](/assets/cat.png)` 
 
 ### Lazy loading responsive images
 Include an image using the standard Markdown syntax, but swap `!` for `?`, and provide a comma-separated list of paths 
