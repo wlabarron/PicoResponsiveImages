@@ -8,19 +8,32 @@ It's a convenient way to [lazy load your images](https://developer.mozilla.org/e
 and make use of the [HTML5 `srcset` attribute](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
 
 ## Install
-1. This plugin is effectively a nice abstraction within Markdown for 
+1. [Download the latest release of this plugin](https://github.com/wlabarron/PicoResponsiveImages/releases) and decompress 
+the folder to your Pico plugins directory.
+2. This plugin is effectively a nice abstraction within Markdown for 
 [aFarkas/lazysizes](https://github.com/aFarkas/lazysizes), so make sure to include lazysizes in your theme file. The 
 easiest way to do it is by adding a script tag from [cdnjs](https://cdnjs.com/libraries/lazysizes) to your theme file, 
 just before the closing `<body>` tag.
-2. [Download the latest release of this plugin](https://github.com/wlabarron/PicoResponsiveImages/releases) and decompress 
-the folder to your Pico plugins directory.
+3. Images won't lazy load when JavaScript is disabled. Instead, they'll fallback onto a standard image using `<noscript>`. 
+To hide the non-functioning lazy loading images when the user has JavaScript disabled, add the following code to your 
+theme's `<head>`.
+``` html
+<noscript>
+   <style>
+       // Hide images which should lazy load,
+       .lazyload {
+           display: none;
+       }
+   </style>
+</noscript>
+```
+
 
 If you're looking for ways of adding a loading animation to your images, check the 
 [lazysizes repo](https://github.com/aFarkas/lazysizes).
 
 ## Usage
-All images added with this plugin's syntax have 100% width. They also have a `<noscript>` fallback, in case the user has 
-JavaScript disabled. 
+All images added with this plugin's syntax have 100% width.
 
 ### Lazy loading images
 Include an image using the standard Markdown syntax, but swap `!` for `?`.
