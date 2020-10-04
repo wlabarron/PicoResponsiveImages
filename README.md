@@ -20,7 +20,7 @@ theme's `<head>`.
 ``` html
 <noscript>
    <style>
-       // Hide images which should lazy load,
+       // Hide images which should lazy load
        .lazyload {
            display: none;
        }
