@@ -10,7 +10,7 @@ use Symfony\Component\Yaml\Parser;
  * @see <a href="https://github.com/aFarkas/lazysizes">LazySizes</a>
  * @see <a href="https://cdnjs.com/libraries/lazysizes">LazySizes on cdnjs</a>
  * @license http://opensource.org/licenses/MIT The MIT License
- * @version 0.1
+ * @version 1.0
  */
 class PicoResponsiveImages extends AbstractPicoPlugin
 {
@@ -72,20 +72,21 @@ class PicoResponsiveImages extends AbstractPicoPlugin
 
                     // Generate the image tag
                     $imageTag = <<<EOT
-<noscript>
- <img src='$src' alt='$alt' width='100%' />
-</noscript>
-<img src='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
- data-sizes='auto'
- data-src='$src'
- $srcset
+<div markdown="1">
+ <noscript>
+  <img src='$src' alt='$alt' width='100%' />
+ </noscript>
+ <img src='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
+  data-sizes='auto'
+  data-src='$src'
+  $srcset
   alt='$alt'
   width='100%' class='lazyload' />
+</div>
 EOT;
 
                     // replace the request with the image HTML
                     $markdown = substr_replace($markdown, $imageTag, $altStart - 2, $pathEnd - $altStart + 3);
-
                 } else {
                     error_log("No paths found after alt text");
                 }
